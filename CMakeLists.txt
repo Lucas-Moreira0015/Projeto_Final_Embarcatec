@@ -44,8 +44,6 @@ pico_set_program_version(Atividade_display "0.1")
 pico_enable_stdio_uart(Atividade_display 0)
 pico_enable_stdio_usb(Atividade_display 1)
 
-pico_generate_pio_header(Atividade_display ${CMAKE_CURRENT_LIST_DIR}/animacoes_led.pio)
-
 # Add the standard library to the build
 target_link_libraries(Atividade_display
         pico_stdlib
