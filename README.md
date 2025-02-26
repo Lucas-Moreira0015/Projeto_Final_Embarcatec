@@ -1,37 +1,76 @@
-Interfaces de comunicaÁ„o serial na BitDogLab
+# Sistema de Controle de Acesso e Alarme
 
-DescriÁ„o:
+## Descri√ß√£o
+Este projeto √© um sistema de controle de acesso e alarme baseado na placa Raspberry Pi Pico, utilizando sensores, LEDs, bot√µes e um display OLED para monitoramento e intera√ß√£o.
 
-Este projeto implementa o controle de LEDs e a exibiÁ„o de caracteres na matriz de LEDs e no display da BitDogLab. A lÛgica do sistema permite a altern‚ncia de estados de LEDs e a exibiÁ„o de letras (A-Z, a-z) e n˙meros (0-9) tanto no display quanto na matriz de LEDs.
+## Funcionalidades
+1. **Controle de Acesso**: Permite abrir e fechar a porta por meio de um bot√£o (Bot√£o A), desde que o dono esteja pr√≥ximo.
+2. **Verifica√ß√£o de Proximidade**: O dono pode ser identificado atrav√©s de um bot√£o (Bot√£o B).
+3. **Alarme de Movimento**: Detecta movimenta√ß√£o atrav√©s do joystick e ativa um alerta.
+4. **Sistema de Alerta**:
+   - LED vermelho e buzzer ativados em caso de alarme.
+   - LED azul ativado ao detectar movimento.
+   - LED verde indica porta aberta.
+5. **Interface de Display**: O display OLED exibe o status atual da porta, proximidade do dono e ativa√ß√£o do alarme.
 
-Os estados dos LEDs seguem uma lÛgica especÌfica, alternando conforme a entrada dos botıes, enquanto os caracteres s„o processados e exibidos corretamente nos dispositivos de saÌda.
+## Componentes Utilizados
+- **Placa**: Raspberry Pi Pico
+- **Display OLED**: SSD1306 (I2C)
+- **Bot√µes**: A e B para intera√ß√£o
+- **Joystick**: Utilizado para detec√ß√£o de movimento
+- **LEDs**:
+  - Verde (porta aberta)
+  - Azul (movimento detectado)
+  - Vermelho (alarme ativado)
+- **Buzzer**: Emite som quando o alarme √© acionado
 
-Componentes Necess·rios:
+## Configura√ß√£o de Hardware
+- **I2C**:
+  - SDA: GPIO 14
+  - SCL: GPIO 15
+- **Bot√µes**:
+  - Bot√£o A: GPIO 5
+  - Bot√£o B: GPIO 6
+  - Bot√£o do Joystick: GPIO 22
+- **Joystick**:
+  - Eixo X: GPIO 26 (ADC)
+  - Eixo Y: GPIO 27 (ADC)
+- **LEDs**:
+  - Verde: GPIO 11
+  - Azul: GPIO 12
+  - Vermelho: GPIO 13
+- **Buzzer**: GPIO 21
 
-BitDogLab (com matriz de LEDs, display e botıes)
-Microcontrolador RP2040
-Bibliotecas para controle do display e da matriz de LEDs
+## L√≥gica de Funcionamento
+1. **Controle de Acesso**:
+   - Pressionar o Bot√£o A abre/fecha a porta se o dono estiver pr√≥ximo.
+   - Se o dono se afastar com a porta aberta, ela fecha automaticamente.
+2. **Detec√ß√£o de Movimento**:
+   - Se o joystick for movido, o sistema detecta movimenta√ß√£o e ativa o LED azul por 5 segundos.
+3. **Sistema de Alarme**:
+   - Pressionar o bot√£o do joystick ativa o alarme (LED vermelho e buzzer).
+   - Se o dono estiver pr√≥ximo, pressionar o Bot√£o B desativa o alarme.
+4. **Atualiza√ß√£o do Display**:
+   - Exibe o status da porta, proximidade do dono e alarme ativado.
 
-Funcionamento:
+## Depend√™ncias
+Este projeto utiliza as bibliotecas:
+- **pico/stdlib.h**
+- **hardware/i2c.h**
+- **hardware/gpio.h**
+- **hardware/adc.h**
+- **hardware/pwm.h**
+- **hardware/clocks.h**
+- **hardware/timer.h**
+- **ssd1306.h** (para controle do display OLED)
 
-No controle dos LEDs, quando os botıes s„o pressionados, os LEDs alternam entre os estados definidos.
-O estado dos LEDs È atualizado no display, e tambÈm È enviado para o serial monitor.
+## Compila√ß√£o e Execu√ß√£o
+1. Instale o SDK do Raspberry Pi Pico.
+2. Compile o c√≥digo com CMake.
+3. Suba o bin√°rio para a placa Pico e execute o programa.
 
-Na exibiÁ„o de Caracteres, o sistema reconhece e processa caracteres alfanumÈricos (A-Z, a-z, 0-9).
-O caractere atual È exibido no display OLED, e para os n˙meros tem exibiÁ„o na matriz de LEDs.
+## Autores
+Desenvolvido para aplica√ß√µes de seguran√ßa residencial e automa√ß√£o.
 
-InterrupÁıes e Debouncing:
+**Autor: Lucas Moreira da Silva**
 
-O cÛdigo implementa uma lÛgica de interrupÁ„o para responder rapidamente ‡ entrada dos botıes.
-Um mecanismo de debouncing evita m˙ltiplos acionamentos acidentais.
-
-Estrutura do CÛdigo:
-
-InicializaÁ„o: Configura os pinos GPIO para LEDs e botıes.
-InterrupÁıes: Monitora os botıes e altera o estado dos LEDs e dos caracteres exibidos.
-RenderizaÁ„o: Atualiza o display e a matriz de LEDs com as informaÁıes atuais.
-
-Autor:
-Mateus Moreira da Silva
-
-Este projeto foi desenvolvido e testado utilizando a BitDogLab com o microcontrolador RP2040.
